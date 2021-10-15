@@ -15,10 +15,40 @@ public class Merchant {
 	public static final int CAUGHT_IN_A_LIE = 10;
 	public static final int INSULTING_OFFER = 5;
 	public static final int ENTICING_OFFER = -5;
+	public static final double PRICE_POINT = 0.25;
 
 	public Merchant(String name, String shopName) {
 		this.name = name;
 		this.shopName = shopName;
+	}
+
+	public void printInventory() {
+		for (Item i : this.inventory) {
+			System.out.println(i.toString());
+			System.out.println();
+		}
+	}
+
+	public Item findItem(String itemName) {
+		for ( Item item : this.inventory ) {
+			if ( item.getName().equals(itemName) ) {
+				return item;
+			}
+		}
+		return null;
+	}
+
+	public double calculateStartingPrice(Item item) {
+		return item.getMarketValue() *  this.startingPrice;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	public ArrayList<Item> getInventory() {
+		return inventory;
 	}
 
 	public int getBarteringDC() {
@@ -61,19 +91,7 @@ public class Merchant {
 		this.startingPrice = startingPrice;
 	}
 
-	public void printInventory() {
-		for (Item i : this.inventory) {
-			System.out.println(i.toString());
-			System.out.println();
-		}
-	}
-
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	public boolean addToInvntory(Item item) {
+	public boolean addToInventory(Item item) {
 		return this.inventory.add(item);
 	}
 }

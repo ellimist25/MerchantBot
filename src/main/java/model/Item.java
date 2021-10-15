@@ -40,4 +40,36 @@ public class Item {
 		}
 		return item.toString();
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getMarketValue() {
+		return marketValue;
+	}
+
+	public void setMarketValue(double marketValue) {
+		this.marketValue = marketValue;
+	}
+
+	public String getRarity() {
+		return rarity;
+	}
+
+	public void setRarity(String rarity) {
+		this.rarity = rarity;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

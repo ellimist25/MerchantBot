@@ -1,5 +1,6 @@
 package merchantbot;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Item;
@@ -13,7 +14,7 @@ public class App {
 		Merchant pat = new Merchant("Patrick Shamtul", "The Fortuitous Purlieu");
 		Item dragonSlayer = new Weapon("Dragon Slayer", 1000.00, "rare", "weapon");
 		Item ringOfWarmth = new Item("Ring of Warmth", 750.00, "uncommon", "ring",
-				"While wearing this ring, you haave reisstance to cold damage. " +
+				"While wearing this ring, you have resistance to cold damage. " +
 						"In addition, you and everything you wear and carry are " +
 						"unharmed by temperatures as low as -50°.");
 		dragonSlayer.setDescription("You gain a +1 bonus to attack and damage rolls when using this weapon." +
@@ -21,8 +22,8 @@ public class App {
 				"This applies to dragonsm dragon turtles and wyverns." +
 				"\nThe weapon is cursed. Every attack has a chance to summon an extra-dimensional creature, hell-bent " +
 				"on killing the wielder, unless the curse is lifted.");
-		pat.addToInvntory(dragonSlayer);
-		pat.addToInvntory(ringOfWarmth);
+		pat.addToInventory(dragonSlayer);
+		pat.addToInventory(ringOfWarmth);
 		pat.setStartingPrice(1.25);
 		pat.setLowestPrice(0.75);
 		pat.setBarteringDC(15);
@@ -84,38 +85,54 @@ public class App {
 
 	/**
 	 * Haggle interface
-	 * What item do you want to haggle?
-	 * Print out the current price the merchant is selling for
 	 * Ask if there should be any modifications to the DC (caught in a lie, etc)
 	 * Print out the DC
 	 * Ask if the PC succeeded or failed the check
 	 * Print out the current price, after any bargaining changes
-	 *
 	 */
-
 	private static void haggleInterface(Merchant merchant) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("What item would you like to haggle with?");
 
+		ArrayList<Item> inventory = merchant.getInventory();
+		for ( int i = 0; i < inventory.size(); i++) {
+			Item item = inventory.get(i);
+			StringBuilder stuff = new StringBuilder();
+			stuff.append(i+1).append(" ").append(item.getName()).append(" - ").
+					append(merchant.calculateStartingPrice(item)).append(" gp");
+			System.out.println(stuff.toString());
+		}
+		int itemChoice = scanner.nextInt() - 1;
+		scanner.nextLine();
+		System.out.println("Modify the DC?");
+		System.out.println("0. No modification.");
+		System.out.println("1. Caught in a Lie?");
+		System.out.println("2. Insulting Offer? (50%)");
+		System.out.println("3. Enticing Offer? (PC offered something I want?)");
+		int dcModification = scanner.nextInt();
+		scanner.nextLine();
+		int barteringDC = merchant.getBarteringDC();
+		if ( dcModification < 0 || dcModification > 3 ) {
+			System.out.println("Invalid option");
+			printMenu(merchant);
+			return;
+		} else if (dcModification == 0) {
+			System.out.println(merchant.getName() + "'s bargaining DC is " + barteringDC);
+		} else {
+			System.out.println(merchant.getName() + "'s adjusted bargaining DC is " + barteringDC);
+			if (dcModification == 1) { barteringDC += 10; }
+			if (dcModification == 2) { barteringDC += 5; }
+			if (dcModification == 3) { barteringDC -= 10; }
+		}
+
+		System.out.println("What did the PC roll?");
+		int pcRoll = scanner.nextInt();
+		scanner.nextLine();
+		if (pcRoll >= merchant.getBarteringDC()) {
+			double marketValue = inventory.get(itemChoice).getMarketValue();
+			double startingPrice = marketValue * merchant.getStartingPrice();
+			double currentPrice = startingPrice - (marketValue * Merchant.PRICE_POINT);
+			System.out.println("PC bargained successfully! Price of item is now " + currentPrice);
+		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
