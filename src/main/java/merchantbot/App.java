@@ -20,7 +20,7 @@ public class App {
 						"unharmed by temperatures as low as -50°.");
 		dragonSlayer.setDescription("You gain a +1 bonus to attack and damage rolls when using this weapon." +
 				"\nWhen you hit a dragon with this weapon, the dragon takes an extra 3d6 points of slashing damage." +
-				"This applies to dragonsm dragon turtles and wyverns." +
+				"This applies to dragons dragon turtles and wyverns." +
 				"\nThe weapon is cursed. Every attack has a chance to summon an extra-dimensional creature, hell-bent " +
 				"on killing the wielder, unless the curse is lifted.");
 		pat.addToInventory(dragonSlayer);
@@ -33,12 +33,10 @@ public class App {
 	}
 
 	private static void game(Merchant merchant) {
-		//Scanner scanner = new Scanner(System.in);
 		boolean endGame = false;
 		printMenu(merchant.getShopName());
 		while (!endGame) {
-			int choice = scanner.nextInt();
-			scanner.nextLine();
+			int choice = scanner.nextInt(); scanner.nextLine();
 			switch(choice) {
 				case 1:
 					merchant.printInventory();
@@ -86,7 +84,6 @@ public class App {
 
 	private static void haggleInterface(Merchant merchant) {
 		System.out.println("What item would you like to haggle with?");
-
 		ArrayList<Item> inventory = merchant.getInventory();
 		for ( int i = 0; i < inventory.size(); i++) {
 			Item item = inventory.get(i);
@@ -100,9 +97,10 @@ public class App {
 			return;
 		}
 		System.out.println(merchant.getName() + "'s bargaining DC is " + finalBargainingDC);
-
 		System.out.println("What did the PC roll?");
 		int pcRoll = scanner.nextInt(); scanner.nextLine();
+
+		// bartering was successful. reduce price of item by 25%
 		if (pcRoll >= merchant.getBarteringDC()) {
 			double marketValue = inventory.get(itemChoice).getMarketValue();
 			double startingPrice = marketValue * merchant.getStartingPercentage();
@@ -113,22 +111,22 @@ public class App {
 
 	private static int calculateBargainDC(int merchantBargainingDC) {
 		System.out.println("Modify the DC?");
-		System.out.println("0. No modification.");
-		System.out.println("1. Caught in a Lie?");
-		System.out.println("2. Insulting Offer? (50%)");
-		System.out.println("3. Enticing Offer? (PC offered something I want?)");
+		System.out.println("1. No modification.");
+		System.out.println("2. Caught in a Lie?");
+		System.out.println("3. Insulting Offer? (50%)");
+		System.out.println("4. Enticing Offer? (PC offered something I want?)");
 
 		int dcModification = scanner.nextInt(); scanner.nextLine();
 
-		if ( dcModification < 0 || dcModification > 3 ) {
+		if ( dcModification < 1 || dcModification > 4 ) {
 			System.out.println("Invalid option");
 			printMenu(merchant.getShopName());
 			return -1;
 		}
 
-		if (dcModification == 1) { merchantBargainingDC += Merchant.CAUGHT_IN_A_LIE; }
-		if (dcModification == 2) { merchantBargainingDC += Merchant.INSULTING_OFFER; }
-		if (dcModification == 3) { merchantBargainingDC -= Merchant.ENTICING_OFFER; }
+		if (dcModification == 2) { merchantBargainingDC += Merchant.CAUGHT_IN_A_LIE; }
+		if (dcModification == 3) { merchantBargainingDC += Merchant.INSULTING_OFFER; }
+		if (dcModification == 4) { merchantBargainingDC -= Merchant.ENTICING_OFFER; }
 		return merchantBargainingDC;
 	}
 }

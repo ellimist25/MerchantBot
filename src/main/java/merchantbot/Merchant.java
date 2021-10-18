@@ -1,8 +1,11 @@
 package merchantbot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.Item;
+import model.MerchantCustomizations;
 
 public class Merchant {
 	public static final int CAUGHT_IN_A_LIE = 10;
@@ -12,7 +15,8 @@ public class Merchant {
 
 	private String name;
 	private String shopName;
-	private ArrayList<Item> inventory = new ArrayList<Item>();
+	private ArrayList<Item> inventory;
+	public Map<Item, MerchantCustomizations> enhancedInventory;
 	private int barteringDC;
 	private double lowestPercentage;
 	private double startingPercentage;
@@ -20,6 +24,8 @@ public class Merchant {
 	public Merchant(String name, String shopName) {
 		this.name = name;
 		this.shopName = shopName;
+		this.inventory = new ArrayList<Item>();
+		this.enhancedInventory = new HashMap<Item, MerchantCustomizations>();
 	}
 
 	public void printInventory() {
