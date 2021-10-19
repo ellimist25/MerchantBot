@@ -26,6 +26,17 @@ public class Merchant {
 		this.shopName = shopName;
 		this.inventory = new ArrayList<Item>();
 		this.enhancedInventory = new HashMap<Item, MerchantCustomizations>();
+		this.lowestPercentage = 1;
+		this.startingPercentage = 1.5;
+	}
+
+	public Merchant(String name, String shopName, double lowestPercentage, double startingPercentage ) {
+		this.name = name;
+		this.shopName = shopName;
+		this.lowestPercentage = lowestPercentage;
+		this.startingPercentage = startingPercentage;
+		this.inventory = new ArrayList<Item>();
+		this.enhancedInventory = new HashMap<Item, MerchantCustomizations>();
 	}
 
 	public void printInventory() {
@@ -37,9 +48,9 @@ public class Merchant {
 	}
 
 	public Item findItem(String itemName) {
-		for ( Item item : this.inventory ) {
-			if ( item.getName().equals(itemName) ) {
-				return item;
+		for (Map.Entry<Item, MerchantCustomizations> pair : this.enhancedInventory.entrySet()) {
+			if (pair.getKey().getName().equals(itemName)) {
+				return pair.getKey();
 			}
 		}
 		return null;
@@ -49,9 +60,27 @@ public class Merchant {
 		return item.getMarketValue() *  this.startingPercentage;
 	}
 
+	public double getMerchantPrice(Item item) {
+		return this.enhancedInventory.get(item).getMerchantPrice();
+	}
+
+	public boolean addToInventory(Item item, int quantity) {
+		MerchantCustomizations mc = new MerchantCustomizations(quantity, calculateStartingPrice(item));
+		this.enhancedInventory.put(item, mc);
+		return this.inventory.add(item);
+	}
+
+	public boolean addToInventory(Item item) {
+		return addToInventory(item, 1);
+	}
+
 	@Override
 	public String toString() {
 		return super.toString();
+	}
+
+	public Map<Item, MerchantCustomizations> getEnhancedInventory() {
+		return enhancedInventory;
 	}
 
 	public ArrayList<Item> getInventory() {
@@ -96,9 +125,5 @@ public class Merchant {
 
 	public void setStartingPercentage(double startingPercentage) {
 		this.startingPercentage = startingPercentage;
-	}
-
-	public boolean addToInventory(Item item) {
-		return this.inventory.add(item);
 	}
 }

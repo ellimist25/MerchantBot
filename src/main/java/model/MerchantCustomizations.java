@@ -14,4 +14,19 @@ public class MerchantCustomizations {
 		this.merchantPrice = merchantPrice;
 	}
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public double getMerchantPrice() {
+		return merchantPrice;
+	}
+
+	public void setMerchantPrice(double merchantPrice) {
+		this.merchantPrice = merchantPrice;
+	}
 }

@@ -11,25 +11,16 @@ public class App {
 	private static Merchant merchant;
 	private static Scanner scanner = new Scanner(System.in);
 	public static void main(String[] args) {
+		Merchant pat = populateMerchant();
+		//game(pat);
+		Item ds = pat.findItem("Dragon Slayer");
+		System.out.println("The monetary value of " + ds.getName() + ":\n" +
+				           "Market value: " + ds.getMarketValue() +
+				           "\nMerchant selling price: " + pat.getMerchantPrice(ds));
+		System.out.println(pat.getMerchantPrice(ds));
+		System.out.println(pat.findItem("Dragon Slayer"));
 
-		Merchant pat = new Merchant("Patrick Shamtul", "The Fortuitous Purlieu");
-		Item dragonSlayer = new Weapon("Dragon Slayer", 1000.00, "rare", "weapon");
-		Item ringOfWarmth = new Item("Ring of Warmth", 750.00, "uncommon", "ring",
-				"While wearing this ring, you have resistance to cold damage. " +
-						"In addition, you and everything you wear and carry are " +
-						"unharmed by temperatures as low as -50°.");
-		dragonSlayer.setDescription("You gain a +1 bonus to attack and damage rolls when using this weapon." +
-				"\nWhen you hit a dragon with this weapon, the dragon takes an extra 3d6 points of slashing damage." +
-				"This applies to dragons dragon turtles and wyverns." +
-				"\nThe weapon is cursed. Every attack has a chance to summon an extra-dimensional creature, hell-bent " +
-				"on killing the wielder, unless the curse is lifted.");
-		pat.addToInventory(dragonSlayer);
-		pat.addToInventory(ringOfWarmth);
-		pat.setStartingPercentage(1.25);
-		pat.setLowestPercentage(0.75);
-		pat.setBarteringDC(15);
 
-		game(pat);
 	}
 
 	private static void game(Merchant merchant) {
@@ -128,5 +119,23 @@ public class App {
 		if (dcModification == 3) { merchantBargainingDC += Merchant.INSULTING_OFFER; }
 		if (dcModification == 4) { merchantBargainingDC -= Merchant.ENTICING_OFFER; }
 		return merchantBargainingDC;
+	}
+
+	private static Merchant populateMerchant() {
+		Merchant pat = new Merchant("Patrick Shamtul", "The Fortuitous Purlieu", 0.75, 1.25);
+		Item dragonSlayer = new Weapon("Dragon Slayer", 1000, "rare", "weapon");
+		Item ringOfWarmth = new Item("Ring of Warmth", 750, "uncommon", "ring",
+				"While wearing this ring, you have resistance to cold damage. " +
+						"In addition, you and everything you wear and carry are " +
+						"unharmed by temperatures as low as -50°.");
+		dragonSlayer.setDescription("You gain a +1 bonus to attack and damage rolls when using this weapon." +
+				"\nWhen you hit a dragon with this weapon, the dragon takes an extra 3d6 points of slashing damage." +
+				"This applies to dragons dragon turtles and wyverns." +
+				"\nThe weapon is cursed. Every attack has a chance to summon an extra-dimensional creature, hell-bent " +
+				"on killing the wielder, unless the curse is lifted.");
+		pat.addToInventory(dragonSlayer);
+		pat.addToInventory(ringOfWarmth);
+		pat.setBarteringDC(15);
+		return pat;
 	}
 }

@@ -15,8 +15,8 @@ public class MerchantTest {
 	@Before
 	public void setup() {
 		this.merchant = new Merchant("Patrick Shamtul", "The Fortuitous Purlieu");
-		Item dragonSlayer = new Weapon("Dragon Slayer", 1000.00, "rare", "weapon");
-		Item ringOfWarmth = new Item("Ring of Warmth", 750.00, "uncommon", "ring",
+		Item dragonSlayer = new Weapon("Dragon Slayer", 1000, "rare", "weapon");
+		Item ringOfWarmth = new Item("Ring of Warmth", 750, "uncommon", "ring",
 				"While wearing this ring, you have resistance to cold damage. " +
 						"In addition, you and everything you wear and carry are " +
 						"unharmed by temperatures as low as -50°.");

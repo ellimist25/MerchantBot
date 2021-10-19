@@ -2,7 +2,7 @@ package model;
 
 public class Item {
 	private String name;
-	private double marketValue;
+	private int marketValue;
 	private String rarity;
 	private String type;
 	private String description;
@@ -15,14 +15,14 @@ public class Item {
 		this.description = description;
 	}
 
-	public Item(String name, double marketValue, String rarity, String type) {
+	public Item(String name, int marketValue, String rarity, String type) {
 		this.name = name;
 		this.marketValue = marketValue;
 		this.rarity = rarity;
 		this.type = type;
 	}
 
-	public Item(String name, double marketValue, String rarity, String type, String description) {
+	public Item(String name, int marketValue, String rarity, String type, String description) {
 		this.name = name;
 		this.marketValue = marketValue;
 		this.rarity = rarity;
@@ -53,7 +53,7 @@ public class Item {
 		return marketValue;
 	}
 
-	public void setMarketValue(double marketValue) {
+	public void setMarketValue(int marketValue) {
 		this.marketValue = marketValue;
 	}
 
