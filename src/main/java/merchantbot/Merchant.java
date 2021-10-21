@@ -15,8 +15,8 @@ public class Merchant {
 
 	private String name;
 	private String shopName;
-	//private ArrayList<Item> inventory;
-	public Map<Item, MerchantCustomizations> inventory;
+	private ArrayList<Item> inventory;
+	public Map<Item, MerchantCustomizations> enhancedInventory;
 	private int barteringDC;
 	private double lowestPercentage;
 	private double startingPercentage;
@@ -24,7 +24,8 @@ public class Merchant {
 	public Merchant(String name, String shopName) {
 		this.name = name;
 		this.shopName = shopName;
-		this.inventory = new HashMap<Item, MerchantCustomizations>();
+		this.inventory = new ArrayList<Item>();
+		this.enhancedInventory = new HashMap<Item, MerchantCustomizations>();
 		this.lowestPercentage = 1;
 		this.startingPercentage = 1.5;
 	}
@@ -34,19 +35,20 @@ public class Merchant {
 		this.shopName = shopName;
 		this.lowestPercentage = lowestPercentage;
 		this.startingPercentage = startingPercentage;
-		this.inventory = new HashMap<Item, MerchantCustomizations>();
+		this.inventory = new ArrayList<Item>();
+		this.enhancedInventory = new HashMap<Item, MerchantCustomizations>();
 	}
 
 	public void printInventory() {
-		for (Map.Entry<Item, MerchantCustomizations> pair : this.inventory.entrySet()) {
-			System.out.println(pair.getKey().toString());
-			System.out.println(pair.getValue().getMerchantPrice());
+		for (Item i : this.inventory) {
+			System.out.println( i.toString() );
+			System.out.println("Current vendor price: " + calculateStartingPrice(i));
 			System.out.println();
 		}
 	}
 
 	public Item findItem(String itemName) {
-		for (Map.Entry<Item, MerchantCustomizations> pair : this.inventory.entrySet()) {
+		for (Map.Entry<Item, MerchantCustomizations> pair : this.enhancedInventory.entrySet()) {
 			if (pair.getKey().getName().equals(itemName)) {
 				return pair.getKey();
 			}
@@ -59,16 +61,17 @@ public class Merchant {
 	}
 
 	public double getMerchantPrice(Item item) {
-		return this.inventory.get(item).getMerchantPrice();
+		return this.enhancedInventory.get(item).getMerchantPrice();
 	}
 
-	public void addToInventory(Item item, int quantity) {
+	public boolean addToInventory(Item item, int quantity) {
 		MerchantCustomizations mc = new MerchantCustomizations(quantity, calculateStartingPrice(item));
-		this.inventory.put(item, mc);
+		this.enhancedInventory.put(item, mc);
+		return this.inventory.add(item);
 	}
 
-	public void addToInventory(Item item) {
-		addToInventory(item, 1);
+	public boolean addToInventory(Item item) {
+		return addToInventory(item, 1);
 	}
 
 	@Override
@@ -76,7 +79,11 @@ public class Merchant {
 		return super.toString();
 	}
 
-	public Map<Item, MerchantCustomizations> getInventory() {
+	public Map<Item, MerchantCustomizations> getEnhancedInventory() {
+		return enhancedInventory;
+	}
+
+	public ArrayList<Item> getInventory() {
 		return inventory;
 	}
 
