@@ -12,21 +12,11 @@ public class App {
 	private static Scanner scanner = new Scanner(System.in);
 	public static void main(String[] args) {
 		Merchant pat = populateMerchant();
-
-		Item ds = pat.findItem("Dragon Slayer");
-		System.out.println("The monetary value of " + ds.getName() + ":\n" +
-				           "Market value: " + ds.getMarketValue() +
-				           "\nMerchant selling price: " + pat.getMerchantPrice(ds));
-		System.out.println(pat.getMerchantPrice(ds));
-		System.out.println(pat.findItem("Dragon Slayer"));
 		game(pat);
-
-
 	}
 
 	private static void game(Merchant merchant) {
 		boolean endGame = false;
-		printMenu(merchant.getShopName());
 		while (!endGame) {
 			printMenu(merchant.getShopName());
 			int choice = scanner.nextInt(); scanner.nextLine();
