@@ -12,11 +12,12 @@ public class Merchant {
 	public static final int INSULTING_OFFER = 5;
 	public static final int ENTICING_OFFER = -5;
 	public static final double PRICE_POINT = 0.25;
+	public static final int MAX_HAGGLE_TIMES = 2;
 
 	private String name;
 	private String shopName;
 	private ArrayList<Item> inventory;
-	public Map<Item, MerchantCustomizations> enhancedInventory;
+	private Map<Item, MerchantCustomizations> enhancedInventory;
 	private int barteringDC;
 	private double lowestPercentage;
 	private double startingPercentage;

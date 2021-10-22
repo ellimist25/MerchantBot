@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Item;
+import model.MerchantCustomizations;
 import model.Weapon;
 
 public class App {
@@ -69,7 +70,7 @@ public class App {
 		ArrayList<Item> inventory = merchant.getInventory();
 		for ( int i = 0; i < inventory.size(); i++) {
 			Item item = inventory.get(i);
-			System.out.println((i+1) + " " + item.getName() + " - " + merchant.calculateStartingPrice(item) + " gp");
+			System.out.println((i+1) + " " + item.getName() + " - " + merchant.getMerchantPrice(item) + " gp");
 		}
 
 		int itemChoice = scanner.nextInt() - 1; scanner.nextLine();
@@ -81,12 +82,21 @@ public class App {
 		System.out.println(merchant.getName() + "'s bargaining DC is " + finalBargainingDC);
 		System.out.println("What did the PC roll?");
 		int pcRoll = scanner.nextInt(); scanner.nextLine();
+		Item chosenItem = inventory.get(itemChoice);
+		MerchantCustomizations chosenItemCustomization = merchant.getEnhancedInventory().get(chosenItem);
 
-		// bartering was successful. reduce price of item by 25%
-		if (pcRoll >= merchant.getBarteringDC()) {
-			double marketValue = inventory.get(itemChoice).getMarketValue();
-			double startingPrice = marketValue * merchant.getStartingPercentage();
-			double currentPrice = startingPrice - (marketValue * Merchant.PRICE_POINT);
+		// bartering failed or maximum haggle attempts reached
+		if (chosenItemCustomization.getTimesHaggled() >= Merchant.MAX_HAGGLE_TIMES || pcRoll < merchant.getBarteringDC()) {
+			System.out.println(merchant.getName() + " says: \"I'm sorry friend, but this is as low as I can go.\"");
+			System.out.println("The price remains unchanged: " + chosenItemCustomization.getMerchantPrice());
+		}
+
+		// bartering was successful. reduce price of item by 25% and update the current merchant price
+		if (pcRoll >= merchant.getBarteringDC() && chosenItemCustomization.getTimesHaggled() < Merchant.MAX_HAGGLE_TIMES) {
+			chosenItemCustomization.incrementTimesHaggled();
+			double marketValue = chosenItem.getMarketValue();
+			double currentPrice = chosenItemCustomization.getMerchantPrice() - (marketValue * Merchant.PRICE_POINT);
+			chosenItemCustomization.setMerchantPrice(currentPrice);
 			System.out.println("PC bargained successfully! Price of item is now " + currentPrice);
 		}
 		return;
