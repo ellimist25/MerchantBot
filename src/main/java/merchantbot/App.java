@@ -12,13 +12,14 @@ public class App {
 	private static Scanner scanner = new Scanner(System.in);
 	public static void main(String[] args) {
 		Merchant pat = populateMerchant();
-		//game(pat);
+
 		Item ds = pat.findItem("Dragon Slayer");
 		System.out.println("The monetary value of " + ds.getName() + ":\n" +
 				           "Market value: " + ds.getMarketValue() +
 				           "\nMerchant selling price: " + pat.getMerchantPrice(ds));
 		System.out.println(pat.getMerchantPrice(ds));
 		System.out.println(pat.findItem("Dragon Slayer"));
+		game(pat);
 
 
 	}
@@ -27,12 +28,12 @@ public class App {
 		boolean endGame = false;
 		printMenu(merchant.getShopName());
 		while (!endGame) {
+			printMenu(merchant.getShopName());
 			int choice = scanner.nextInt(); scanner.nextLine();
 			switch(choice) {
 				case 1:
 					merchant.printInventory();
 					System.out.println("\n==========================================");
-					printMenu(merchant.getShopName());
 					break;
 				case 2:
 					haggleInterface(merchant);
@@ -98,6 +99,7 @@ public class App {
 			double currentPrice = startingPrice - (marketValue * Merchant.PRICE_POINT);
 			System.out.println("PC bargained successfully! Price of item is now " + currentPrice);
 		}
+		return;
 	}
 
 	private static int calculateBargainDC(int merchantBargainingDC) {
