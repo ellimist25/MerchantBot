@@ -1,6 +1,8 @@
 package merchantbot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import model.Item;
@@ -27,10 +29,12 @@ public class App {
 					System.out.println("\n==========================================");
 					break;
 				case 2:
+					// try to haggle something
 					haggleInterface(merchant);
 					break;
 				case 3:
 					// purchase something
+					purchaseSomething(merchant);
 					break;
 				case 4:
 					// sell something
@@ -65,14 +69,24 @@ public class App {
 		}
 	}
 
+	private static void purchaseSomething(Merchant merchant) {
+		printMerchantInventorySimple(merchant);
+		System.out.println("What would you like to purchase?");
+		int choice = scanner.nextInt() - 1; scanner.nextLine();
+		Item chosenItem = merchant.getInventory().get(choice);
+		MerchantCustomizations mc = merchant.getEnhancedInventory().get(chosenItem);
+		if (mc.getQuantity() > 0) {
+			mc.setQuantity( mc.getQuantity() - 1 );
+			System.out.println("Purchase complete! Enjoy your new " + chosenItem.getName());
+			System.out.println();
+		} else {
+			System.out.println("Cannot purchase: merchant is out of stock.");
+		}
+	}
+
 	private static void haggleInterface(Merchant merchant) {
 		System.out.println("What item would you like to haggle with?");
-		ArrayList<Item> inventory = merchant.getInventory();
-		for ( int i = 0; i < inventory.size(); i++) {
-			Item item = inventory.get(i);
-			System.out.println((i+1) + " " + item.getName() + " - " + merchant.getMerchantPrice(item) + " gp");
-		}
-
+		printMerchantInventorySimple(merchant);
 		int itemChoice = scanner.nextInt() - 1; scanner.nextLine();
 		int finalBargainingDC = calculateBargainDC(merchant.getBarteringDC());
 		if ( finalBargainingDC == -1 ) {
@@ -82,6 +96,7 @@ public class App {
 		System.out.println(merchant.getName() + "'s bargaining DC is " + finalBargainingDC);
 		System.out.println("What did the PC roll?");
 		int pcRoll = scanner.nextInt(); scanner.nextLine();
+		ArrayList<Item> inventory = merchant.getInventory();
 		Item chosenItem = inventory.get(itemChoice);
 		MerchantCustomizations chosenItemCustomization = merchant.getEnhancedInventory().get(chosenItem);
 
@@ -100,6 +115,14 @@ public class App {
 			System.out.println("PC bargained successfully! Price of item is now " + currentPrice);
 		}
 		return;
+	}
+
+	private static void printMerchantInventorySimple(Merchant merchant) {
+		ArrayList<Item> inventory = merchant.getInventory();
+		for ( int i = 0; i < inventory.size(); i++) {
+			Item item = inventory.get(i);
+			System.out.println((i+1) + " " + item.getName() + " - " + merchant.getMerchantPrice(item) + " gp");
+		}
 	}
 
 	private static int calculateBargainDC(int merchantBargainingDC) {
